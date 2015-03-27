@@ -1,0 +1,1 @@
+3.	Design and implement deployment system to deploy and start a single jar java app on a remote server. Explain the choice of any tools that you use (if any)

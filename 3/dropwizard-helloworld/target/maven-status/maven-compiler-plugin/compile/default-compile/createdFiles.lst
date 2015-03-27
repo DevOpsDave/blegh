@@ -1,0 +1,4 @@
+com/kyleconroy/helloworld/HelloWorldConfiguration.class
+com/kyleconroy/helloworld/health/TemplateHealthCheck.class
+com/kyleconroy/helloworld/resources/HelloEpicResource.class
+com/kyleconroy/helloworld/models/Saying.class

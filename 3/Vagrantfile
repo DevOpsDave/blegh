@@ -1,0 +1,47 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = 'puppetlabs/centos-7.0-64-puppet'
+
+  config.vm.provider 'virtualbox' do |vb|
+    vb.customize ['modifyvm', :id, '--memory', '2048']
+  end
+
+  # Setup networking
+  config.vm.provision :hosts do |hosts|
+    hosts.autoconfigure = true
+    hosts.add_host = '192.168.1.10', ['deployctl']
+    hosts.add_host = '192.168.1.11', ['app1']
+    hosts.add_host = '192.168.1.12', ['app2']
+    hosts.add_host = '192.168.1.20', ['loadbalancer']
+  end
+
+  # Common script.
+  config.vm.provision :shell, :privileged => true, :path => 'provisioners/shell/common.sh'
+
+  config.vm.define 'deployctl' do |node|
+    node.vm.hostname = 'deployctl'
+    node.vm.network :private_network, :ip => '192.168.1.10'
+    node.vm.provision :shell, :privileged => true, :path =>  'provisioners/shell/deployctl.sh'
+  end
+
+  config.vm.define 'app1' do |node|
+    node.vm.hostname = 'app1'
+    node.vm.network :private_network, :ip => '192.168.1.11'
+    node.vm.provision :shell, :privileged => true, :path =>  'provisioners/shell/app.sh'
+  end
+
+  config.vm.define 'app2' do |node|
+    node.vm.hostname = 'app2'
+    node.vm.network :private_network, :ip => '192.168.1.12'
+    node.vm.provision :shell, :privileged => true, :path =>  'provisioners/shell/app.sh'
+  end
+
+  config.vm.define 'loadbalancer' do |node|
+    node.vm.hostname = 'loadbalancer'
+    node.vm.network :private_network, :ip => '192.168.1.20'
+  end
+
+end
