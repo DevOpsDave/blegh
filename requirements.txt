@@ -1,0 +1,4 @@
+ipython
+#apachelog
+apache-log-parser
+paramiko
